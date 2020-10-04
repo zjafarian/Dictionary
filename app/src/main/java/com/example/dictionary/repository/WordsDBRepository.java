@@ -2,7 +2,7 @@ package com.example.dictionary.repository;
 
 import android.content.Context;
 
-import com.example.dictionary.model.Words;
+import com.example.dictionary.model.Word;
 
 import java.util.List;
 
@@ -10,7 +10,10 @@ public class WordsDBRepository implements IRepository {
     private static WordsDBRepository sInstance;
     private Context mContext;
 
-    private WordsDBRepository() {
+    private WordsDBRepository(Context context) {
+        mContext = context.getApplicationContext();
+
+
 
     }
 
@@ -22,27 +25,27 @@ public class WordsDBRepository implements IRepository {
     }
 
     @Override
-    public List<Words> getWords() {
+    public List<Word> getWords() {
         return null;
     }
 
     @Override
-    public Words getWord(long id) {
+    public Word getWord(long id) {
         return null;
     }
 
     @Override
-    public void insertWord(Words word) {
+    public void insertWord(Word word) {
 
     }
 
     @Override
-    public void updateWord(Words word) {
+    public void updateWord(Word word) {
 
     }
 
     @Override
-    public void deleteWord(Words word) {
+    public void deleteWord(Word word) {
 
     }
 }

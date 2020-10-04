@@ -1,13 +1,13 @@
 package com.example.dictionary.repository;
 
-import com.example.dictionary.model.Words;
+import com.example.dictionary.model.Word;
 
 import java.util.List;
 
 public interface IRepository {
-    List<Words> getWords();
-    Words getWord(long id);
-    void insertWord(Words word);
-    void updateWord (Words word);
-    void deleteWord (Words word);
+    List<Word> getWords();
+    Word getWord(long id);
+    void insertWord(Word word);
+    void updateWord (Word word);
+    void deleteWord (Word word);
 }

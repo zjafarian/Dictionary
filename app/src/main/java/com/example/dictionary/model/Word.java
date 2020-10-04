@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "WordsTable")
-public class Words {
+public class Word {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "IdWord")
@@ -13,7 +13,7 @@ public class Words {
 
     @ColumnInfo(name = "Word")
     private String mWord;
-    
+
     @ColumnInfo(name = "Meaning")
     private String mMeaning;
 
