@@ -2,6 +2,8 @@
     <string name="app_name">Dictionary</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_iten_menu">Add</string>
+    <string name="add_item_menu">Add</string>
     <string name="search_item_menu">Search</string>
+    <string name="persian_switch">English to Persian</string>
+    <string name="english_switch">Persian to English</string>
 </resources>

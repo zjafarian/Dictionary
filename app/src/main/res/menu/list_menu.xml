@@ -10,6 +10,20 @@
         app:showAsAction="ifRoom|collapseActionView" />
     <item
         android:icon="@drawable/ic_add"
-        android:title="@string/add_iten_menu"
+        android:title="@string/add_item_menu"
         app:showAsAction="ifRoom|withText" />
+    <group android:id="@+id/change_words">
+        <item
+            android:id="@+id/switch_en_to_pr"
+            android:checked="true"
+            android:title="@string/persian_switch"
+            app:actionLayout="@layout/switch_item"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/switch_pr_to_en"
+            android:checked="false"
+            android:title="@string/english_switch"
+            app:actionLayout="@layout/switch_item"
+            app:showAsAction="never" />
+    </group>
 </menu>
