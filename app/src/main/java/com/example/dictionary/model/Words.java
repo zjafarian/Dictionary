@@ -1,8 +1,20 @@
 package com.example.dictionary.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "WordsTable")
 public class Words {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "IdWord")
     private long mPrimaryId;
+
+    @ColumnInfo(name = "Word")
     private String mWord;
+    
+    @ColumnInfo(name = "Meaning")
     private String mMeaning;
 
     public long getPrimaryId() {
