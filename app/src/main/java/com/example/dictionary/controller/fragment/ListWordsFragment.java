@@ -145,7 +145,7 @@ public class ListWordsFragment extends Fragment {
         private MaterialTextView mTextMeaning;
         private ImageButton mImgBtnEdit;
         private ImageButton mImgBtnRemove;
-        private Word mWord;
+        private Word mWordHolder;
 
         public WordHolder(@NonNull View itemView) {
             super(itemView);
@@ -160,7 +160,7 @@ public class ListWordsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     EditWordFragment editWordFragment =
-                            EditWordFragment.newInstance(mWord.getPrimaryId(), mCheck);
+                            EditWordFragment.newInstance(mWordHolder.getPrimaryId(), mCheck);
 
                     editWordFragment.setTargetFragment(ListWordsFragment.this,
                             REQUEST_CODE_EDIT_WORD);
@@ -173,6 +173,9 @@ public class ListWordsFragment extends Fragment {
             mImgBtnRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mWordRepository.deleteWord(mWordHolder);
+                    mWords = mWordRepository.getWords();
+                    initViews();
 
                 }
             });
@@ -186,7 +189,7 @@ public class ListWordsFragment extends Fragment {
         }
 
         private void bindWord(Word word) {
-            mWord = word;
+            mWordHolder = word;
             if (mCheck) {
                 mTextWord.setText(word.getWord());
                 mTextMeaning.setText(word.getMeaning());
