@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.dictionary.R;
-import com.example.dictionary.database.WordDatabase;
 import com.example.dictionary.model.Word;
 import com.example.dictionary.repository.IRepository;
 import com.example.dictionary.repository.WordsDBRepository;
@@ -27,27 +26,31 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
+public class EditWordFragment extends DialogFragment {
 
-public class AddWordDialogFragment extends DialogFragment {
+
+    public static final String ARGS_ID_WORD = "idWord";
     public static final String ARGS_CHECK_LANGUAGE = "checkLanguage";
-    public static final String EXTRA_SEND_ID_WORD = "com.example.dictionary.sendIdWord";
+    public static final String EXTRA_EDIT_WORD = "com.example.dictionary.editWord";
     private IRepository mRepository;
-    private TextInputEditText mTextWord;
-    private TextInputEditText mTextMeaning;
-    private boolean mCheckLanguage;
-    private String mWordString;
-    private String mMeaningString;
+    private List<Word> mWordList;
     private Word mWord;
+    private long mIdWord;
+    private TextInputEditText mTextWordEdit;
+    private TextInputEditText mTextMeaningEdit;
+    private boolean mCheckLanguage;
+    private String mWordStringEdit;
+    private String mMeaningStringEdit;
 
-
-    public AddWordDialogFragment() {
+    public EditWordFragment() {
         // Required empty public constructor
     }
 
 
-    public static AddWordDialogFragment newInstance(boolean check) {
-        AddWordDialogFragment fragment = new AddWordDialogFragment();
+    public static EditWordFragment newInstance(long id, boolean check) {
+        EditWordFragment fragment = new EditWordFragment();
         Bundle args = new Bundle();
+        args.putLong(ARGS_ID_WORD, id);
         args.putBoolean(ARGS_CHECK_LANGUAGE, check);
         fragment.setArguments(args);
         return fragment;
@@ -57,8 +60,14 @@ public class AddWordDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRepository = WordsDBRepository.getInstance(getActivity());
+        mWordList = mRepository.getWords();
         if (getArguments() != null) {
+            mIdWord = getArguments().getLong(ARGS_ID_WORD);
             mCheckLanguage = getArguments().getBoolean(ARGS_CHECK_LANGUAGE);
+        }
+        for (Word wordFind : mWordList) {
+            if (wordFind.getPrimaryId() == mIdWord)
+                mWord = wordFind;
         }
     }
 
@@ -66,25 +75,31 @@ public class AddWordDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.fragment_add_word_dialog, null);
+        View view = inflater.inflate(R.layout.fragment_edit_word, null);
         setViews(view);
+        initViews();
         setListener();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.title_add_word)
+                .setTitle(R.string.title_edit_word)
                 .setView(view)
-                .setPositiveButton(R.string.add_word, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.save_edit, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        createWord();
+                        editWord();
                         sendResult();
-
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, null);
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismiss();
+                    }
+                });
 
         AlertDialog dialog = builder.create();
 
         return dialog;
+
     }
 
     private void sendResult() {
@@ -92,59 +107,74 @@ public class AddWordDialogFragment extends DialogFragment {
         int requestCode = getTargetRequestCode();
         int resultCode = Activity.RESULT_OK;
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_SEND_ID_WORD, mWord.getPrimaryId());
+        intent.putExtra(EXTRA_EDIT_WORD, mWord.getPrimaryId());
         fragment.onActivityResult(requestCode, resultCode, intent);
+
+
     }
 
-    private void createWord() {
-        if (mCheckLanguage) {
-            mWord= new Word(mWordString, mMeaningString);
-            mRepository.insertWord(mWord);
+    private void editWord() {
+        if(mCheckLanguage){
+            mWord.setWord(mWordStringEdit);
+            mWord.setMeaning(mMeaningStringEdit);
         } else {
-            mWord = new Word(mMeaningString, mWordString);
-            mRepository.insertWord(mWord);
+            mWord.setWord(mMeaningStringEdit);
+            mWord.setMeaning(mWordStringEdit);
         }
     }
 
-    private void setListener() {
-        mTextWord.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void initViews() {
+        if (mCheckLanguage) {
+            mTextWordEdit.setText(mWord.getWord());
+            mTextMeaningEdit.setText(mWord.getMeaning());
+        } else {
+            mTextWordEdit.setText(mWord.getMeaning());
+            mTextMeaningEdit.setText(mWord.getWord());
+        }
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mWordString = mTextWord.getText().toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mTextMeaning.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mMeaningString = mTextMeaning.getText().toString();
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     private void setViews(View view) {
-        mTextWord = view.findViewById(R.id.add_word);
-        mTextMeaning = view.findViewById(R.id.add_meaning);
+        mTextWordEdit = view.findViewById(R.id.edit_word);
+        mTextMeaningEdit = view.findViewById(R.id.edit_meaning);
+    }
+
+    private void setListener() {
+
+        mTextWordEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mWordStringEdit = mTextWordEdit.getText().toString();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mTextMeaningEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mMeaningStringEdit = mTextMeaningEdit.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 }

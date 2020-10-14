@@ -9,5 +9,8 @@
     <string name="hint_add_word">Type Word</string>
     <string name="hint_add_meaning">Type Meaning</string>
     <string name="add_word">Add</string>
+    <string name="save_edit">Save</string>
     <string name="title_add_word">Add Word</string>
+    <string name="search_hint">Search</string>
+    <string name="title_edit_word">Edit Word</string>
 </resources>
