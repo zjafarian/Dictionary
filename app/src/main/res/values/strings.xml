@@ -13,4 +13,7 @@
     <string name="title_add_word">Add Word</string>
     <string name="search_hint">Search</string>
     <string name="title_edit_word">Edit Word</string>
+    <string name="text_share">Share Word</string>
+    <string name="word_share_subject">Dictionary Word Report</string>
+    <string name="send_report">Send word report via</string>
 </resources>

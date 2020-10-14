@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 
@@ -26,6 +28,7 @@ import com.example.dictionary.repository.IRepository;
 import com.example.dictionary.repository.WordsDBRepository;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -98,6 +101,8 @@ public class ListWordsFragment extends Fragment {
             mCheck = true;
         else if (itemEnToPr.isVisible())
             mCheck = false;
+
+        updateSubtitle();
     }
 
     @Override
@@ -128,6 +133,13 @@ public class ListWordsFragment extends Fragment {
         }
     }
 
+    private void updateSubtitle() {
+        int numberOfWords = mWordRepository.getWords().size();
+        String wordsText = numberOfWords + " words";
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(wordsText);
+    }
+
     private void findViews(View view) {
         mRecyclerView = view.findViewById(R.id.recycle_view_words);
     }
@@ -145,6 +157,7 @@ public class ListWordsFragment extends Fragment {
         private MaterialTextView mTextMeaning;
         private ImageButton mImgBtnEdit;
         private ImageButton mImgBtnRemove;
+        private Button mButtonShare;
         private Word mWordHolder;
 
         public WordHolder(@NonNull View itemView) {
@@ -179,6 +192,43 @@ public class ListWordsFragment extends Fragment {
 
                 }
             });
+
+            mButtonShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shareReportIntent();
+
+                }
+            });
+        }
+
+        private void shareReportIntent() {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getReport());
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.word_share_subject));
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent =
+                    Intent.createChooser(sendIntent, getString(R.string.send_report));
+
+            //we prevent app from crash if the intent has no destination.
+            if (sendIntent.resolveActivity(getActivity().getPackageManager()) != null)
+                startActivity(shareIntent);
+        }
+
+        private String getReport() {
+            String word;
+            String meaning;
+            String report;
+            if (mCheck){
+                word = mWord.getWord();
+                meaning = mWord.getMeaning();
+            } else {
+                word = mWord.getMeaning();
+                meaning = mWord.getWord();
+            }
+            report = "Meaning of " + word + " is" + meaning;
+            return report;
         }
 
         private void findViews(@NonNull View itemView) {
@@ -186,6 +236,7 @@ public class ListWordsFragment extends Fragment {
             mTextMeaning = itemView.findViewById(R.id.text_view_meaning);
             mImgBtnEdit = itemView.findViewById(R.id.img_btn_edit);
             mImgBtnRemove = itemView.findViewById(R.id.img_btn_remove);
+            mButtonShare = itemView.findViewById(R.id.btn_share);
         }
 
         private void bindWord(Word word) {
