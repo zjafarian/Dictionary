@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -61,13 +64,42 @@ public class ListWordsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.list_menu, menu);
+        MenuItem itemSearch = menu.findItem(R.id.app_bar_search);
+        MenuItem itemAdd = menu.findItem(R.id.add_word);
+        MenuItem itemToEnglish = menu.findItem(R.id.switch_pr_to_en);
+        MenuItem itemToPersian = menu.findItem(R.id.switch_en_to_pr);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_word:
+                
+                return true;
+            case R.id.app_bar_search:
+                // TODO:
+                return true;
+            case R.id.switch_en_to_pr:
+                //todo
+                return true;
+            case R.id.switch_pr_to_en:
+                //todo
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void findViews(View view) {
         mRecyclerView = view.findViewById(R.id.recycle_view_words);
     }
 
     private void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mWordAdapter =new WordAdapter(mWords);
+        mWordAdapter = new WordAdapter(mWords);
         mRecyclerView.setAdapter(mWordAdapter);
     }
 

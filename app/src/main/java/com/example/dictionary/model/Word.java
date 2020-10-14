@@ -17,6 +17,14 @@ public class Word {
     @ColumnInfo(name = "Meaning")
     private String mMeaning;
 
+    public Word() {
+    }
+
+    public Word(String word, String meaning) {
+        mWord = word;
+        mMeaning = meaning;
+    }
+
     public long getPrimaryId() {
         return mPrimaryId;
     }

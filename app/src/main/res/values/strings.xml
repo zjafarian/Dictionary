@@ -6,4 +6,8 @@
     <string name="search_item_menu">Search</string>
     <string name="persian_switch">English to Persian</string>
     <string name="english_switch">Persian to English</string>
+    <string name="hint_add_word">Type Word</string>
+    <string name="hint_add_meaning">Type Meaning</string>
+    <string name="add_word">Add</string>
+    <string name="title_add_word">Add Word</string>
 </resources>

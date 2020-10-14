@@ -9,6 +9,7 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
+        android:id="@+id/add_word"
         android:icon="@drawable/ic_add"
         android:title="@string/add_item_menu"
         app:showAsAction="ifRoom|withText" />
@@ -17,6 +18,7 @@
             android:id="@+id/switch_en_to_pr"
             android:checked="true"
             android:title="@string/persian_switch"
+            android:visible="false"
             app:actionLayout="@layout/switch_item"
             app:showAsAction="never" />
         <item
