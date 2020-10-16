@@ -86,6 +86,7 @@ public class EditWordFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         editWord();
+                        updateWord();
                         sendResult();
                     }
                 })
@@ -114,7 +115,7 @@ public class EditWordFragment extends DialogFragment {
     }
 
     private void editWord() {
-        if(mCheckLanguage){
+        if (mCheckLanguage) {
             mWord.setWord(mWordStringEdit);
             mWord.setMeaning(mMeaningStringEdit);
         } else {
@@ -127,9 +128,13 @@ public class EditWordFragment extends DialogFragment {
         if (mCheckLanguage) {
             mTextWordEdit.setText(mWord.getWord());
             mTextMeaningEdit.setText(mWord.getMeaning());
+            mWordStringEdit = mWord.getWord();
+            mMeaningStringEdit = mWord.getMeaning();
         } else {
             mTextWordEdit.setText(mWord.getMeaning());
             mTextMeaningEdit.setText(mWord.getWord());
+            mWordStringEdit = mWord.getMeaning();
+            mMeaningStringEdit = mWord.getWord();
         }
 
     }
@@ -176,5 +181,9 @@ public class EditWordFragment extends DialogFragment {
             }
         });
 
+    }
+
+    private void updateWord() {
+        mRepository.updateWord(mWord);
     }
 }
