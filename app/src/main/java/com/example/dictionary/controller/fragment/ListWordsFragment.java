@@ -43,6 +43,7 @@ public class ListWordsFragment extends Fragment {
     public static final int REQUEST_CODE_ADD_WORD = 0;
     public static final int REQUEST_CODE_EDIT_WORD = 1;
     public static final String TAG_EDIT_WORD = "editWord";
+    public static final String SAVE_CHECK_LANGUAGE = "Save_check_language";
     private RecyclerView mRecyclerView;
     private IRepository mWordRepository;
     private List<Word> mWords;
@@ -72,6 +73,9 @@ public class ListWordsFragment extends Fragment {
 
         mWordRepository = WordsDBRepository.getInstance(getActivity());
         mWords = mWordRepository.getWords();
+        if (savedInstanceState != null){
+            mCheck = savedInstanceState.getBoolean(SAVE_CHECK_LANGUAGE);
+        }
 
 
     }
@@ -83,6 +87,9 @@ public class ListWordsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list_words, container, false);
         findViews(view);
         initViews();
+        if (savedInstanceState != null){
+            initViews();
+        }
 
         return view;
     }
@@ -362,4 +369,9 @@ public class ListWordsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SAVE_CHECK_LANGUAGE,mCheck);
+    }
 }
